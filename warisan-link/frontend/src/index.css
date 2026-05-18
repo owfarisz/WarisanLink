@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-warisan-cream text-warisan-dark;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-warisan-gold text-warisan-dark px-4 py-2 rounded-lg font-semibold hover:bg-opacity-90 transition-colors;
+  }
+  .btn-secondary {
+    @apply border border-warisan-dark text-warisan-dark px-4 py-2 rounded-lg font-semibold hover:bg-warisan-dark hover:text-white transition-colors;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow;
+  }
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-warisan-gold focus:border-transparent outline-none;
+  }
+  .label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+}
+
+.leaflet-container {
+  z-index: 1;
+}
