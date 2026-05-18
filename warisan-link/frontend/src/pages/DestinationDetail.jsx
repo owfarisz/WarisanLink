@@ -26,18 +26,10 @@ function DestinationDetail() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">
-      <div className="relative mb-8">
-        <img
-          src={destination.coverImageUrl || '/placeholder.jpg'}
-          alt={destination.name}
-          className="w-full h-96 object-cover rounded-xl"
-        />
-        <div className="absolute top-4 left-4">
+      <div className="mb-8 p-6 rounded-xl border-2" style={{ borderColor: destination.category?.colorHex || '#e2b96f', backgroundColor: `${destination.category?.colorHex}08` || '#e2b96f08' }}>
+        <div className="flex items-center gap-3 mb-3">
           <HeritageBadge category={destination.category} />
         </div>
-      </div>
-
-      <div className="mb-6">
         <h1 className="text-4xl font-bold font-serif">{destination.name}</h1>
         <p className="text-gray-600 mt-2">{destination.city}, {destination.province}</p>
       </div>
@@ -64,16 +56,6 @@ function DestinationDetail() {
           {destination.localEtiquette && (
             <Section title="Etika Lokal">
               <p className="text-gray-700 whitespace-pre-line">{destination.localEtiquette}</p>
-            </Section>
-          )}
-
-          {destination.galleryUrls?.length > 0 && (
-            <Section title="Galeri">
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {destination.galleryUrls.map((url, i) => (
-                  <img key={i} src={url} alt={`Gallery ${i + 1}`} className="w-full h-40 object-cover rounded-lg" />
-                ))}
-              </div>
             </Section>
           )}
         </div>

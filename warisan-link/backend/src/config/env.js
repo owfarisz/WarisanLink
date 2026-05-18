@@ -8,6 +8,9 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   DATABASE_URL: z.string().min(1),
   UPLOAD_DIR: z.string().default('./uploads'),
+  UNSPLASH_ACCESS_KEY: z.string().optional(),
+  PEXELS_API_KEY: z.string().optional(),
+  PIXABAY_API_KEY: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);

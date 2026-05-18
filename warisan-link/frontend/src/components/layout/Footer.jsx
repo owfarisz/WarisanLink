@@ -18,9 +18,7 @@ function Footer() {
           <div>
             <h4 className="font-semibold mb-4">Explore</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><Link to="/discover" className="hover:text-warisan-gold">Heritage Discover</Link></li>
-              <li><Link to="/discover?accessLevel=EASY" className="hover:text-warisan-gold">Easy Access</Link></li>
-              <li><Link to="/discover?category=malay-heritage" className="hover:text-warisan-gold">Malay Heritage</Link></li>
+              <li><Link to="/tourism" className="hover:text-warisan-gold">Jelajahi Wisata</Link></li>
             </ul>
           </div>
           <div>

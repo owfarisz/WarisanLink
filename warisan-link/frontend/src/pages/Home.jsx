@@ -19,7 +19,7 @@ function Home() {
             Temukan hidden gems warisan budaya Indonesia. Cerita lokal, koneksi historis, dan panduan akses lengkap untuk traveler.
           </p>
           <div className="flex gap-4 justify-center">
-            <Link to="/discover">
+            <Link to="/tourism">
               <Button variant="default" size="lg" className="flex items-center gap-2">
                 Mulai Eksplorasi <ArrowRight className="h-5 w-5" />
               </Button>
@@ -52,7 +52,7 @@ function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-3xl font-bold font-serif">Destinasi Populer</h2>
-            <Link to="/discover" className="text-warisan-gold hover:underline flex items-center gap-1">
+            <Link to="/tourism" className="text-warisan-gold hover:underline flex items-center gap-1">
               Lihat Semua <ArrowRight className="h-4 w-4" />
             </Link>
           </div>

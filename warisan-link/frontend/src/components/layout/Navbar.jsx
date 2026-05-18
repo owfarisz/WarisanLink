@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Menu, X, Compass, Clock } from 'lucide-react';
+import { Menu, X, Compass, Clock, Globe } from 'lucide-react';
 import { useState } from 'react';
 
 function Navbar() {
@@ -15,7 +15,9 @@ function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-6">
-            <Link to="/discover" className="hover:text-warisan-gold transition-colors">Discover</Link>
+            <Link to="/tourism" className="flex items-center gap-1 hover:text-warisan-gold transition-colors">
+              <Globe className="h-4 w-4" /> Wisata
+            </Link>
             <Link to="/history" className="flex items-center gap-1 hover:text-warisan-gold transition-colors">
               <Clock className="h-4 w-4" /> Riwayat
             </Link>
@@ -29,7 +31,9 @@ function Navbar() {
 
       {isOpen && (
         <div className="md:hidden bg-warisan-dark border-t border-gray-700 px-4 py-4 space-y-3">
-          <Link to="/discover" className="block hover:text-warisan-gold" onClick={() => setIsOpen(false)}>Discover</Link>
+          <Link to="/tourism" className="flex items-center gap-1 hover:text-warisan-gold" onClick={() => setIsOpen(false)}>
+            <Globe className="h-4 w-4" /> Wisata
+          </Link>
           <Link to="/history" className="flex items-center gap-1 hover:text-warisan-gold" onClick={() => setIsOpen(false)}>
             <Clock className="h-4 w-4" /> Riwayat
           </Link>

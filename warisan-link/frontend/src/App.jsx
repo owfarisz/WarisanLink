@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
-import Discover from './pages/Discover';
+import TourismDiscover from './pages/TourismDiscover';
 import DestinationDetail from './pages/DestinationDetail';
 import History from './pages/History';
 
@@ -13,7 +13,7 @@ function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/discover" element={<Discover />} />
+          <Route path="/tourism" element={<TourismDiscover />} />
           <Route path="/destination/:slug" element={<DestinationDetail />} />
           <Route path="/history" element={<History />} />
         </Routes>

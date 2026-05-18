@@ -27,7 +27,6 @@ cd backend
 cp .env.example .env
 npm install
 npx prisma migrate dev
-npx prisma db seed
 npm run dev
 ```
 
@@ -41,10 +40,10 @@ npm run dev
 
 ## Features
 
-- **Heritage Discover** — Browse 15+ pre-seeded Indonesian heritage destinations
+- **Jelajahi Wisata** — Discover tourism spots across Southeast Asia via OpenStreetMap
 - **Access Compass** — Real-time weather, routing distance, entry points, travel tips
 - **Visit History** — Track destinations you've viewed (localStorage + DB)
-- **Search & Filter** — By category, province, access level, or keyword
+- **Search & Filter** — By country, province, category, or keyword
 - **Interactive Maps** — Leaflet + OpenStreetMap with gateway-to-destination route lines
 
 ## External APIs Used
@@ -54,14 +53,6 @@ npm run dev
 | [Open-Meteo](https://open-meteo.com/) | Real-time weather data | Free, no API key |
 | [Nominatim](https://nominatim.openstreetmap.org/) | Reverse geocoding | Free, no API key |
 | [OSRM](http://project-osrm.org/) | Routing & distance | Free, no API key |
-
-## Pre-seeded Destinations
-
-15 real Indonesian heritage destinations with Malaysia connections:
-- Pulau Penyengat, Istana Maimun, Masjid Raya Baiturrahman
-- Kota Tua Jakarta, Keraton Yogyakarta, Candi Borobudur
-- Tana Toraja, Desa Wae Rebo, Rumah Gadang Bukittinggi
-- Dan 6 destinasi lainnya
 
 ## Environment Variables
 

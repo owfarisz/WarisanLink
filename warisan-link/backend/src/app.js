@@ -11,6 +11,7 @@ import weatherRoutes from './modules/weather/weather.routes.js';
 import geocodingRoutes from './modules/geocoding/geocoding.routes.js';
 import routingRoutes from './modules/routing/routing.routes.js';
 import historyRoutes from './modules/history/history.routes.js';
+import tourismRoutes from './modules/tourism/tourism.routes.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/v1/weather', weatherRoutes);
 app.use('/api/v1/geocoding', geocodingRoutes);
 app.use('/api/v1/routing', routingRoutes);
 app.use('/api/v1/history', historyRoutes);
+app.use('/api/v1/tourism', tourismRoutes);
 
 app.use('/uploads', express.static(env.UPLOAD_DIR));
 
