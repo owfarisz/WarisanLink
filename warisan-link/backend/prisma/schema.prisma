@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -7,66 +8,126 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id            Int           @id @default(autoincrement())
-  name          String        @unique @db.VarChar(100)
-  slug          String        @unique @db.VarChar(100)
-  description   String?
-  iconName      String?       @db.VarChar(50)
-  colorHex      String?       @db.VarChar(7)
-  createdAt     DateTime      @default(now())
-
-  destinations  Destination[]
-}
-
-model Destination {
-  id                Int            @id @default(autoincrement())
-  slug              String         @unique @db.VarChar(200)
-  name              String         @db.VarChar(200)
-  city              String         @db.VarChar(100)
-  province          String         @db.VarChar(100)
-  categoryId        Int
-  shortDesc         String         @db.VarChar(500)
-  culturalMeaning   String
-  localHistory      String
-  malaysiaConnection String
-  localEtiquette    String?
-  coverImageUrl     String?        @db.VarChar(500)
-  galleryUrls       Json?
-  viewCount         Int            @default(0)
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-
-  category          Category       @relation(fields: [categoryId], references: [id])
-  accessCompass     AccessCompass?
-
-  @@index([categoryId])
-  @@index([province])
-}
-
-model AccessCompass {
-  id                Int          @id @default(autoincrement())
-  destinationId     Int          @unique
-  nearestGateway    String       @db.VarChar(200)
-  entryPoint        String?      @db.VarChar(300)
-  distanceKm        Float?
-  accessLevel       AccessLevel  @default(MODERATE)
-  weatherSummary    String?      @db.VarChar(500)
-  bestTimeToVisit   String?      @db.VarChar(300)
-  travelNotes       String?
-  safetyNotes       String?
-  latitude          Float?
-  longitude         Float?
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-
-  destination       Destination  @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-}
+// ── Enums ────────────────────────────────────────────────────
 
 enum AccessLevel {
   EASY
   MODERATE
   REMOTE
+}
+
+enum Role {
+  SUPERADMIN
+  KONTRIBUTOR
+  TURIS
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  SUSPENDED
+}
+
+enum DestinationStatus {
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+// ── Models ───────────────────────────────────────────────────
+
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  password     String
+  name         String      @db.VarChar(200)
+  role         Role        @default(TURIS)
+  status       UserStatus  @default(PENDING)
+  organization String?     @db.VarChar(200)
+  bio          String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  destinations Destination[] @relation("KontributorDestinations")
+  journeys     JourneyItem[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model JourneyItem {
+  id            String      @id @default(uuid())
+  userId        String
+  destinationId Int
+  savedAt       DateTime    @default(now())
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, destinationId])
+  @@index([userId])
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique @db.VarChar(100)
+  slug         String        @unique @db.VarChar(100)
+  description  String?
+  iconName     String?       @db.VarChar(50)
+  colorHex     String?       @db.VarChar(7)
+  createdAt    DateTime      @default(now())
+
+  destinations Destination[]
+}
+
+model Destination {
+  id                 Int               @id @default(autoincrement())
+  slug               String            @unique @db.VarChar(200)
+  name               String            @db.VarChar(200)
+  city               String            @db.VarChar(100)
+  province           String            @db.VarChar(100)
+  categoryId         Int
+  shortDesc          String            @db.VarChar(500)
+  culturalMeaning    String
+  localHistory       String
+  malaysiaConnection String
+  localEtiquette     String?
+  coverImageUrl      String?           @db.VarChar(500)
+  galleryUrls        Json?
+  viewCount          Int               @default(0)
+  destStatus         DestinationStatus @default(PUBLISHED)
+  creatorId          String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  category      Category      @relation(fields: [categoryId], references: [id])
+  accessCompass AccessCompass?
+  creator       User?         @relation("KontributorDestinations", fields: [creatorId], references: [id])
+  journeys      JourneyItem[]
+
+  @@index([categoryId])
+  @@index([province])
+  @@index([destStatus])
+}
+
+model AccessCompass {
+  id              Int         @id @default(autoincrement())
+  destinationId   Int         @unique
+  nearestGateway  String      @db.VarChar(200)
+  entryPoint      String?     @db.VarChar(300)
+  distanceKm      Float?
+  accessLevel     AccessLevel @default(MODERATE)
+  weatherSummary  String?     @db.VarChar(500)
+  bestTimeToVisit String?     @db.VarChar(300)
+  travelNotes     String?
+  safetyNotes     String?
+  latitude        Float?
+  longitude       Float?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
 }
 
 model VisitHistory {

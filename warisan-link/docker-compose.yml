@@ -1,16 +1,73 @@
+name: warisan-link
+
 services:
-  postgres:
-    image: postgres:16
-    container_name: warisan-postgres
-    restart: always
+  db:
+    image: postgres:16-alpine
+    container_name: warisan-db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: warisan_user
-      POSTGRES_PASSWORD: StrongPassword!123
-      POSTGRES_DB: warisan_link
-    ports:
-      - "5432:5432"
+      POSTGRES_USER: ${DB_USER:-warisan_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-StrongPassword!123}
+      POSTGRES_DB: ${DB_NAME:-warisan_link}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT:-5434}:5432"
+    networks:
+      - warisan-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-warisan_user} -d ${DB_NAME:-warisan_link}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: warisan-backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads
+      - ./backend/logs:/app/logs
+    networks:
+      - warisan-network
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/v1/categories || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /api/v1
+        VITE_APP_NAME: "WARISAN LINK"
+    container_name: warisan-frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-8082}:80"
+    networks:
+      - warisan-network
+
+networks:
+  warisan-network:
+    driver: bridge
+    name: warisan-network
 
 volumes:
   postgres_data:
+    name: warisan-postgres-data
+  uploads:
+    name: warisan-uploads

@@ -4,6 +4,10 @@ import helmet from 'helmet';
 import { env } from './config/env.js';
 import { rateLimiter } from './middlewares/rateLimiter.js';
 import { errorHandler } from './middlewares/error.middleware.js';
+import { verifyToken, requireRole } from './middlewares/auth.middleware.js';
+
+import authRoutes from './modules/auth/auth.routes.js';
+import adminRoutes from './modules/admin/admin.routes.js';
 import destinationRoutes from './modules/destinations/destination.routes.js';
 import compassRoutes from './modules/access-compass/compass.routes.js';
 import categoryRoutes from './modules/categories/category.routes.js';
@@ -20,6 +24,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Auth routes (public)
+app.use('/api/v1/auth', authRoutes);
+
+// Admin routes (Superadmin only)
+app.use('/api/v1/admin', verifyToken, requireRole('SUPERADMIN'), adminRoutes);
+
+// Feature routes
 app.use('/api/v1/destinations', destinationRoutes);
 app.use('/api/v1/compass', compassRoutes);
 app.use('/api/v1/categories', categoryRoutes);
@@ -29,6 +40,7 @@ app.use('/api/v1/routing', routingRoutes);
 app.use('/api/v1/history', historyRoutes);
 app.use('/api/v1/tourism', tourismRoutes);
 
+// Static file serving for uploads
 app.use('/uploads', express.static(env.UPLOAD_DIR));
 
 app.use(errorHandler);
