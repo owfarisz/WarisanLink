@@ -1,12 +1,22 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Compass, BookOpen, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useDestinations } from '@/hooks/useDestinations';
+import { useAuthStore } from '@/store/authStore';
 import HeritageGrid from '@/components/heritage/HeritageGrid';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 
+const DASHBOARD_PATH = {
+  SUPERADMIN: '/admin',
+  KONTRIBUTOR: '/kontributor',
+  TURIS: '/dashboard',
+};
+
 function Home() {
   const { data, isLoading } = useDestinations({ limit: 6, sort: 'popular' });
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
+  const explorasiPath = DASHBOARD_PATH[user?.role] ?? '/tourism';
 
   return (
     <div>
@@ -19,11 +29,9 @@ function Home() {
             Temukan hidden gems warisan budaya Indonesia. Cerita lokal, koneksi historis, dan panduan akses lengkap untuk traveler.
           </p>
           <div className="flex gap-4 justify-center">
-            <Link to="/tourism">
-              <Button variant="default" size="lg" className="flex items-center gap-2">
-                Mulai Eksplorasi <ArrowRight className="h-5 w-5" />
-              </Button>
-            </Link>
+            <Button variant="default" size="lg" className="flex items-center gap-2" onClick={() => navigate(explorasiPath)}>
+              Mulai Eksplorasi <ArrowRight className="h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
