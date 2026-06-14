@@ -16,5 +16,3 @@ coverage/
 *.swp
 *.swo
 *~
-prisma/migrations/
-frontend/src/components/ui/
